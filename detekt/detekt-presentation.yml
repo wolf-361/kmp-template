@@ -1,0 +1,29 @@
+# Presentation layer — forbidden import rules only.
+# Applied exclusively to files matching: src/commonMain/kotlin/**/presentation/**/*.kt
+# Registered as the :shared:detektPresentationImports task (wired into `check`).
+#
+# Rule: the presentation layer (ViewModels, State, Action, Effect) must NOT reach
+# into the data layer directly. All data access must flow through domain use cases
+# and repository interfaces.
+
+style:
+  ForbiddenImport:
+    active: true
+    imports:
+      # Persistence — access only via use cases / repositories
+      - value: 'androidx.room.*'
+        reason: 'Room is a data layer concern. ViewModels must call use cases, not DAOs directly.'
+      - value: 'androidx.datastore.*'
+        reason: 'DataStore is a data layer concern. Expose preferences via a repository or use case.'
+      - value: 'androidx.sqlite.*'
+        reason: 'SQLite is a data layer concern. Presentation layer must not interact with storage directly.'
+
+      # Networking — access only via repositories
+      - value: 'io.ktor.*'
+        reason: 'Ktor is a data layer concern. ViewModels must call use cases, not HTTP clients directly.'
+
+      # Android framework (platform-specific code belongs in composeApp, not shared presentation)
+      - value: 'android.content.*'
+        reason: 'Android Context is forbidden in shared ViewModels. Inject platform-specific behaviour via interface.'
+      - value: 'android.app.*'
+        reason: 'Android application classes are forbidden in shared ViewModels.'

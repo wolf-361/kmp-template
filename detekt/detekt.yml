@@ -1,0 +1,160 @@
+# Base Detekt configuration — applied to all source files in all modules.
+# Layer-specific forbidden imports are in detekt-domain.yml and detekt-presentation.yml.
+# Run via: ./gradlew detekt (standard quality) + :shared:detektDomainImports + :shared:detektPresentationImports
+
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+
+# ─── Global forbidden imports ─────────────────────────────────────────────────
+style:
+  ForbiddenImport:
+    active: true
+    imports:
+      - value: 'java.util.Date'
+        reason: 'Use kotlinx.datetime.Instant or LocalDate'
+      - value: 'java.util.Calendar'
+        reason: 'Use kotlinx.datetime'
+      - value: 'java.time.*'
+        reason: 'Use kotlinx.datetime — java.time is not available in Kotlin/Native'
+      - value: 'java.text.SimpleDateFormat'
+        reason: 'Use kotlinx.datetime formatters'
+      - value: 'java.text.DateFormat'
+        reason: 'Use kotlinx.datetime formatters'
+
+  MagicNumber:
+    active: true
+    ignoreNumbers:
+      - '-1'
+      - '0'
+      - '1'
+      - '2'
+      - '100'
+    ignoreEnums: true
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreNamedArgument: true
+
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludeImportStatements: true
+    excludeCommentStatements: true
+
+  WildcardImport:
+    active: true
+    excludeImports:
+      - 'kotlinx.coroutines.*'
+      - 'org.jetbrains.compose.resources.*'
+
+  UnusedImports:
+    active: true
+
+  NewLineAtEndOfFile:
+    active: true
+
+  TrailingWhitespace:
+    active: true
+
+# ─── Naming ───────────────────────────────────────────────────────────────────
+naming:
+  FunctionNaming:
+    active: true
+    functionPattern: '[a-z][a-zA-Z0-9]*'
+    # Compose functions start with uppercase — exclude UI files
+    excludes:
+      - '**/presentation/**/*.kt'
+      - '**/ui/**/*.kt'
+
+  PackageNaming:
+    active: true
+    packagePattern: '[a-z]+(\.[a-z][a-zA-Z0-9]*)*'
+
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z][a-zA-Z0-9]*'
+
+# ─── Complexity ───────────────────────────────────────────────────────────────
+complexity:
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 30
+    thresholdInClasses: 20
+    thresholdInObjects: 20
+    thresholdInInterfaces: 15
+
+  LongMethod:
+    active: true
+    threshold: 60
+
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 8
+    ignoreDefaultParameters: true
+    ignoreDataClasses: true
+    ignoreAnnotated:
+      - 'Composable'
+
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 15
+
+  ComplexCondition:
+    active: true
+    threshold: 5
+
+# ─── Potential bugs ───────────────────────────────────────────────────────────
+potential-bugs:
+  IgnoredReturnValue:
+    active: true
+
+  UnreachableCode:
+    active: true
+
+  UnnecessaryNotNullCheck:
+    active: true
+
+# ─── Coroutines ───────────────────────────────────────────────────────────────
+coroutines:
+  GlobalCoroutineUsage:
+    active: true
+
+  RedundantSuspendModifier:
+    active: true
+
+  SuspendFunWithFlowReturnType:
+    active: true
+
+# ─── Exceptions ───────────────────────────────────────────────────────────────
+exceptions:
+  SwallowedException:
+    active: true
+    ignoredExceptionTypes:
+      - 'SerializationException'  # Intentionally caught and mapped in NetworkClient
+
+  TooGenericExceptionCaught:
+    active: true
+    exceptionNames:
+      - 'Exception'
+      - 'Throwable'
+    allowedExceptionNameRegex: '_|(ignore|expected).*'
+    # The catch-all in NetworkClientImpl is intentional — do not flag
+    excludes:
+      - '**/NetworkClientImpl.kt'
+
+  TooGenericExceptionThrown:
+    active: true
+
+# ─── Empty blocks ─────────────────────────────────────────────────────────────
+empty-blocks:
+  EmptyCatchBlock:
+    active: true
+    allowedExceptionNameRegex: '_|(ignore|expected).*'
+
+  EmptyFunctionBlock:
+    active: true
+    ignoreOverridden: true

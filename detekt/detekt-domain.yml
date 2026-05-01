@@ -1,0 +1,46 @@
+# Domain layer — forbidden import rules only.
+# Applied exclusively to files matching: src/commonMain/kotlin/**/domain/**/*.kt
+# Registered as the :shared:detektDomainImports task (wired into `check`).
+#
+# Rule: the domain layer must have ZERO dependencies on:
+#   • persistence frameworks (Room, DataStore)
+#   • HTTP clients (Ktor)
+#   • UI toolkits (Compose)
+#   • Android framework
+# This ensures domain logic is pure Kotlin, platform-agnostic, and testable in commonTest.
+
+style:
+  ForbiddenImport:
+    active: true
+    imports:
+      # Persistence — use repository interface instead
+      - value: 'androidx.room.*'
+        reason: 'Room is a data layer concern. Define a repository interface in domain; implement it in data.'
+      - value: 'androidx.datastore.*'
+        reason: 'DataStore is a data layer concern. Expose reactive state via repository interface.'
+      - value: 'androidx.sqlite.*'
+        reason: 'SQLite is a data layer concern. Domain must not know about storage mechanics.'
+
+      # Networking — use repository interface instead
+      - value: 'io.ktor.*'
+        reason: 'Ktor is a data layer concern. Domain calls repository interfaces, not HTTP clients.'
+
+      # UI — domain must be platform-agnostic
+      - value: 'androidx.compose.*'
+        reason: 'Compose is a UI concern. Domain must not reference any UI framework.'
+      - value: 'org.jetbrains.compose.*'
+        reason: 'Compose Multiplatform is a UI concern. Domain must not reference any UI framework.'
+
+      # Android framework
+      - value: 'android.*'
+        reason: 'Android framework imports are forbidden in domain. Use expect/actual or inject platform behaviour via interface.'
+      - value: 'androidx.lifecycle.*'
+        reason: 'Lifecycle is an Android/UI concern. Use coroutines in domain; scope them in the ViewModel.'
+
+      # Koin runtime (annotations are OK — they are compile-time metadata only)
+      - value: 'org.koin.core.context.*'
+        reason: 'Do not start/access the Koin container from domain code.'
+      - value: 'org.koin.core.component.*'
+        reason: 'KoinComponent belongs in the presentation layer (BaseViewModel). Domain uses constructor injection.'
+      - value: 'org.koin.android.*'
+        reason: 'Android-specific Koin extensions are forbidden in domain.'

@@ -1,0 +1,49 @@
+default_platform(:android)
+
+# ─── Android ──────────────────────────────────────────────────────────────────
+
+platform :android do
+  desc "Build a signed release AAB and upload to Google Play"
+  lane :deploy do |options|
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file"     => ENV["KEYSTORE_PATH"],
+        "android.injected.signing.store.password" => ENV["STORE_PASSWORD"],
+        "android.injected.signing.key.alias"      => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password"   => ENV["KEY_PASSWORD"],
+      },
+    )
+    upload_to_play_store(
+      track: options[:track] || "internal",
+      aab: "composeApp/build/outputs/bundle/release/composeApp-release.aab",
+      json_key_data: ENV["PLAY_SERVICE_ACCOUNT_JSON"],
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+end
+
+# ─── iOS ──────────────────────────────────────────────────────────────────────
+
+platform :ios do
+  desc "Build and upload to TestFlight"
+  lane :deploy do
+    # `readonly: is_ci` — match downloads certs but never creates them on CI
+    match(type: "appstore", readonly: is_ci)
+    build_app(
+      workspace: "iosApp/iosApp.xcworkspace",
+      scheme: "iosApp",
+      export_method: "app-store",
+      clean: true,
+    )
+    upload_to_testflight(
+      api_key_path: "fastlane/api_key.json",
+      skip_waiting_for_build_processing: true,
+    )
+  end
+end

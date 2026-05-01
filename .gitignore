@@ -1,0 +1,55 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Android
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# iOS
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+Pods/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Fastlane
+fastlane/api_key.json   # Written at runtime from secret; never committed
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+Gemfile.lock            # Optionally commit for reproducible CI builds
+
+# KMP / Kotlin/Native
+.konan/
+*.klib
+
+# Kotlin build outputs
+kotlin-js-store/
+
+# Environment / secrets
+.env
+*.env
+keystore.jks

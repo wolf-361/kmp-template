@@ -1,0 +1,121 @@
+[versions]
+# Build toolchain — see ADR-014
+kotlin                  = "2.3.20"   # pinned: 2.3.21 not yet supported by SKIE (check touchlab/SKIE releases before bumping)
+agp                     = "9.1.1"
+# KSP switched to standalone semver in 2.3.x — no longer tied to Kotlin version string
+ksp                     = "2.3.7"
+
+# Compose
+compose-multiplatform   = "1.10.3"
+# material3 KMP has its own release cadence — does NOT match the CMP plugin version
+compose-material3-kmp   = "1.9.0"
+
+# KotlinX
+kotlinx-coroutines      = "1.10.2"
+kotlinx-serialization   = "1.10.0"
+kotlinx-datetime        = "0.7.0"
+
+# Networking — see ADR-008
+ktor                    = "3.4.3"
+
+# Storage — see ADR-003
+room                    = "2.8.4"
+sqlite-bundled          = "2.5.0"   # KMP SQLite driver for iOS (bundled, no system lib needed)
+datastore               = "1.2.0"
+
+# DI — see ADR-007
+# Koin and Koin Annotations merged versioning in 4.x
+koin                    = "4.2.1"
+koin-annotations        = "4.2.1"
+
+# Logging — see ADR-002
+kermit                  = "2.0.5"
+
+# Resources — see ADR-001
+libres                  = "1.2.2"
+
+# Swift interop — see ADR-012
+skie                    = "0.10.11"
+
+# Code quality — see ADR-013
+detekt                  = "1.23.7"
+spotless                = "8.0.0"
+ktlint                  = "1.5.0"
+
+# Testing — see ADR-011
+mokkery                 = "3.0.0"
+kotest                  = "6.0.0"
+turbine                 = "1.2.0"
+
+# Android
+androidx-activity       = "1.10.1"
+
+# ----------------------------------------------------------------
+
+[libraries]
+# Compose Multiplatform — explicit coords required (compose.xxx accessor removed in CMP 1.10)
+compose-runtime              = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-foundation           = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material3            = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3-kmp" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+
+# KotlinX
+kotlinx-coroutines-core         = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test         = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-json      = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime                = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+# Ktor
+ktor-client-core                = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-logging             = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-serialization-json         = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-android             = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin              = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-mock                = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+
+# Room KMP
+room-runtime                    = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler                   = { module = "androidx.room:room-compiler", version.ref = "room" }
+sqlite-bundled                  = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite-bundled" }
+
+# DataStore
+datastore-preferences-core      = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
+
+# Koin
+koin-core                       = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android                    = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-androidx-compose           = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-annotations                = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
+koin-ksp-compiler               = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-test                       = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+
+# Kermit
+kermit                          = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+# Testing
+kotest-assertions               = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+turbine                         = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
+# Android
+androidx-activity-compose       = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+
+# ----------------------------------------------------------------
+
+[plugins]
+kotlin-multiplatform        = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+# kotlin-android omitted — AGP 9.0+ includes Kotlin support built-in (kotl.in/gradle/agp-built-in-kotlin)
+kotlin-serialization        = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose              = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-application                     = { id = "com.android.application", version.ref = "agp" }
+android-library                         = { id = "com.android.library", version.ref = "agp" }
+# AGP 9.0+: combined KMP library plugin — replaces android.library + kotlin.multiplatform combo
+android-kotlin-multiplatform-library    = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+compose-multiplatform       = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+ksp                         = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room                        = { id = "androidx.room", version.ref = "room" }
+skie                        = { id = "co.touchlab.skie", version.ref = "skie" }
+libres                      = { id = "io.github.skeptick.libres", version.ref = "libres" }
+detekt                      = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+spotless                    = { id = "com.diffplug.spotless", version.ref = "spotless" }
+mokkery                     = { id = "dev.mokkery", version.ref = "mokkery" }

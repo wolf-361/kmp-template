@@ -1,0 +1,6 @@
+git_url("https://github.com/yourorg/certificates")
+storage_mode("git")
+type("appstore")
+
+app_identifier(["com.yourcompany.kmptemplate"])
+username("your@email.com")
