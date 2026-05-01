@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.navigation.compose)
 }
 
 // Auto-install the pre-commit hook on every Android build

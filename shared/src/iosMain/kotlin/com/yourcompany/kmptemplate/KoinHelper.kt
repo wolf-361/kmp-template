@@ -1,0 +1,29 @@
+package com.yourcompany.kmptemplate
+
+import com.yourcompany.kmptemplate.auth.data.IOSOAuthFlowLauncher
+import com.yourcompany.kmptemplate.auth.domain.port.OAuthFlowLauncher
+import com.yourcompany.kmptemplate.auth.presentation.AuthViewModel
+import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
+import com.yourcompany.kmptemplate.di.AuthModule
+import com.yourcompany.kmptemplate.di.CoreModule
+import org.koin.core.context.startKoin
+import org.koin.core.context.GlobalContext
+import org.koin.dsl.module
+import org.koin.ksp.generated.module
+
+fun initKoin() {
+    startKoin {
+        modules(
+            CoreModule().module,
+            AuthModule().module,
+            module { single<OAuthFlowLauncher> { IOSOAuthFlowLauncher() } },
+        )
+    }
+}
+
+// Convenience accessors for the iOS app layer — avoids raw Koin API from Swift.
+fun getGlobalUiEffectsHandler(): GlobalUiEffectsHandler =
+    GlobalContext.get().get()
+
+fun getAuthViewModel(): AuthViewModel =
+    GlobalContext.get().get()

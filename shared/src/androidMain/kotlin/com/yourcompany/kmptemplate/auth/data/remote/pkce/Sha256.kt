@@ -1,0 +1,6 @@
+package com.yourcompany.kmptemplate.auth.data.remote.pkce
+
+import java.security.MessageDigest
+
+actual fun sha256(input: ByteArray): ByteArray =
+    MessageDigest.getInstance("SHA-256").digest(input)

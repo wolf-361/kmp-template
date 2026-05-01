@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.libres)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.skie)
 }
 
 // ─── Kotlin Multiplatform ─────────────────────────────────────────────────────
@@ -78,6 +79,8 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.androidx.security.crypto)
+            implementation(libs.androidx.browser)
         }
 
         iosMain.dependencies {

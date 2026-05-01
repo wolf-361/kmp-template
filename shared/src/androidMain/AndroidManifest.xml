@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!--
+            Transparent trampoline activity that receives the OAuth redirect.
+            Registered in the shared library manifest so composeApp doesn't need to know about it.
+            scheme="kmptemplate" host="oauth" matches kmptemplate://oauth/{provider}/callback.
+        -->
+        <activity
+            android:name="com.yourcompany.kmptemplate.auth.data.OAuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="oauth"
+                    android:scheme="kmptemplate" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

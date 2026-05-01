@@ -1,5 +1,6 @@
 package com.yourcompany.kmptemplate.core.domain
 
+import com.yourcompany.kmptemplate.core.domain.extensions.handle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -9,54 +10,77 @@ import kotlin.test.assertTrue
 class AppResultTest {
 
     @Test
-    fun `success triggers onSuccess with data`() {
-        val result: AppResult<String> = AppResult.Success("hello")
+    fun `Success map transforms data`() {
+        val result = AppResult.Success(42).map { it * 2 }
+        assertIs<AppResult.Success<Int>>(result)
+        assertEquals(84, result.data)
+    }
+
+    @Test
+    fun `Failure map is a no-op`() {
+        val error = CoreError.Unauthorized
+        val result: AppResult<Int> = AppResult.Failure(error)
+        val mapped = result.map { it * 2 }
+        assertIs<AppResult.Failure>(mapped)
+        assertEquals(error, mapped.error)
+    }
+
+    @Test
+    fun `flatMap chains successful results`() {
+        val result = AppResult.Success(10)
+            .flatMap { AppResult.Success(it + 5) }
+        assertIs<AppResult.Success<Int>>(result)
+        assertEquals(15, result.data)
+    }
+
+    @Test
+    fun `flatMap short-circuits on Failure`() {
+        val result: AppResult<Int> = AppResult.Failure(CoreError.Network.Timeout)
+            .flatMap { AppResult.Success(42) }
+        assertIs<AppResult.Failure>(result)
+    }
+
+    @Test
+    fun `toUnit wraps data in Unit`() {
+        val result = AppResult.Success("hello").toUnit()
+        assertIs<AppResult.Success<Unit>>(result)
+        assertEquals(Unit, result.data)
+    }
+
+    @Test
+    fun `handle success block is called`() {
         var captured: String? = null
-        result.onSuccess { captured = it }
+        AppResult.Success("hello").handle {
+            success { captured = it }
+        }
         assertEquals("hello", captured)
     }
 
     @Test
-    fun `success does not trigger onError`() {
-        val result: AppResult<String> = AppResult.Success("hello")
+    fun `handle typed failure block is called for matching error`() {
         var called = false
-        result.onError { called = true }
-        assertFalse(called)
+        AppResult.Failure(CoreError.Network.Timeout).handle {
+            failure<CoreError.Network.Timeout> { called = true }
+        }
+        assertTrue(called)
     }
 
     @Test
-    fun `network error triggers onError as Network`() {
-        val exception = RuntimeException("network failure")
-        val result: AppResult<String> = AppResult.Error.Network(exception)
-        var captured: AppResult.Error? = null
-        result.onError { captured = it }
-        val networkError = assertIs<AppResult.Error.Network>(captured)
-        assertEquals(exception, networkError.throwable)
+    fun `handle catch block fires when no typed failure matches`() {
+        var caught: AppError? = null
+        AppResult.Failure(CoreError.DataCorruption).handle {
+            failure<CoreError.Unauthorized> { /* won't fire */ }
+            catch { caught = it }
+        }
+        assertEquals(CoreError.DataCorruption, caught)
     }
 
     @Test
-    fun `unexpected error triggers onError as Unexpected`() {
-        val exception = RuntimeException("crash")
-        val result: AppResult<String> = AppResult.Error.Unexpected(exception)
-        var captured: AppResult.Error? = null
-        result.onError { captured = it }
-        val unexpectedError = assertIs<AppResult.Error.Unexpected>(captured)
-        assertEquals(exception, unexpectedError.throwable)
-    }
-
-    @Test
-    fun `error does not trigger onSuccess`() {
-        val result: AppResult<String> = AppResult.Error.Network(RuntimeException())
+    fun `handle success block not called on Failure`() {
         var called = false
-        result.onSuccess { called = true }
+        AppResult.Failure(CoreError.Unauthorized).handle {
+            success { called = true }
+        }
         assertFalse(called)
-    }
-
-    @Test
-    fun `onSuccess is chainable`() {
-        val result: AppResult<Int> = AppResult.Success(42)
-        var count = 0
-        result.onSuccess { count++ }.onSuccess { count++ }
-        assertEquals(2, count)
     }
 }

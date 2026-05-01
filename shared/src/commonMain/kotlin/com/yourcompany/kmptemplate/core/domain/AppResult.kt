@@ -2,19 +2,17 @@ package com.yourcompany.kmptemplate.core.domain
 
 sealed class AppResult<out T> {
     data class Success<T>(val data: T) : AppResult<T>()
-
-    sealed class Error : AppResult<Nothing>() {
-        data class Network(val throwable: Throwable) : Error()
-        data class Unexpected(val throwable: Throwable) : Error()
-    }
+    data class Failure(val error: AppError) : AppResult<Nothing>()
 }
 
-inline fun <T> AppResult<T>.onSuccess(block: (T) -> Unit): AppResult<T> {
-    if (this is AppResult.Success) block(data)
-    return this
+fun <T, R> AppResult<T>.map(transform: (T) -> R): AppResult<R> = when (this) {
+    is AppResult.Success -> AppResult.Success(transform(data))
+    is AppResult.Failure -> this
 }
 
-inline fun <T> AppResult<T>.onError(block: (AppResult.Error) -> Unit): AppResult<T> {
-    if (this is AppResult.Error) block(this)
-    return this
+fun <T, R> AppResult<T>.flatMap(transform: (T) -> AppResult<R>): AppResult<R> = when (this) {
+    is AppResult.Success -> transform(data)
+    is AppResult.Failure -> this
 }
+
+fun <T> AppResult<T>.toUnit(): AppResult<Unit> = map {}
