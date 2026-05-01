@@ -24,6 +24,10 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
+        // Opt-in to JVM host tests (Robolectric) — creates the androidHostTest source set
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
     }
 
     listOf(
@@ -131,6 +135,10 @@ dependencies {
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
+
+    // androidHostTest — Robolectric for JVM unit tests that need Android Context (e.g. Room in-memory)
+    add("androidHostTestImplementation", libs.robolectric)
+    add("androidHostTestImplementation", libs.androidx.test.core)
 }
 
 // ─── Detekt — layer boundary enforcement ─────────────────────────────────────

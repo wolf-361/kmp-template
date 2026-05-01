@@ -46,6 +46,8 @@ ktlint                  = "1.5.0"
 mokkery                 = "3.0.0"
 kotest                  = "6.0.0"
 turbine                 = "1.2.0"
+robolectric             = "4.16.1"
+androidx-test-core      = "1.7.0"
 
 # Android
 androidx-activity       = "1.10.1"
@@ -96,6 +98,8 @@ kermit                          = { module = "co.touchlab:kermit", version.ref =
 # Testing
 kotest-assertions               = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 turbine                         = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+robolectric                     = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-test-core              = { module = "androidx.test:core", version.ref = "androidx-test-core" }
 
 # Android
 androidx-activity-compose       = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
