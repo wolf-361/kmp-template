@@ -17,6 +17,7 @@ import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
 import com.yourcompany.kmptemplate.core.navigation.AuthDestination
 import com.yourcompany.kmptemplate.core.navigation.Destination
 import com.yourcompany.kmptemplate.core.navigation.TopLevelGraph
+// <create-feature:import> — imports added by create-feature.sh go here
 
 @Composable
 fun AppNavHost(
@@ -47,6 +48,7 @@ fun AppNavHost(
         composable<AuthDestination.Register> { PlaceholderScreen("Register") }
         composable<TopLevelGraph.Dashboard> { PlaceholderScreen("Dashboard") }
         composable<TopLevelGraph.Settings> { PlaceholderScreen("Settings") }
+        // <create-feature:composable> — composable entries added by create-feature.sh go here
     }
 }
 
@@ -64,5 +66,6 @@ private fun NavController.navigate(destination: Destination) {
         is AuthDestination.Register -> navigate(destination)
         is TopLevelGraph.Dashboard -> navigate(destination)
         is TopLevelGraph.Settings -> navigate(destination)
+        // <create-feature:navigate> — dispatch cases added by create-feature.sh go here
     }
 }
