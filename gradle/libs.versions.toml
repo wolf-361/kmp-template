@@ -1,9 +1,9 @@
 [versions]
 # Build toolchain — see ADR-014
-kotlin                  = "2.3.20"   # pinned: 2.3.21 not yet supported by SKIE (check touchlab/SKIE releases before bumping)
+kotlin                  = "2.3.21"   # SKIE 0.10.12 now supports 2.3.21
 agp                     = "9.1.1"
 # KSP switched to standalone semver in 2.3.x — no longer tied to Kotlin version string
-ksp                     = "2.3.7"
+ksp                     = "2.3.8"
 
 # Compose
 compose-multiplatform   = "1.10.3"
@@ -24,9 +24,10 @@ sqlite-bundled          = "2.5.0"   # KMP SQLite driver for iOS (bundled, no sys
 datastore               = "1.2.0"
 
 # DI — see ADR-007
-# Koin and Koin Annotations merged versioning in 4.x
+# Koin 4.x merged versioning for koin-annotations jar only; koin-ksp-compiler stays on 2.x
 koin                    = "4.2.1"
 koin-annotations        = "4.2.1"
+koin-ksp-compiler       = "2.3.1"    # koin-ksp-compiler has NOT merged to 4.x — stays on 2.x
 
 # Logging — see ADR-002
 kermit                  = "2.0.5"
@@ -35,7 +36,7 @@ kermit                  = "2.0.5"
 libres                  = "1.2.2"
 
 # Swift interop — see ADR-012
-skie                    = "0.10.11"
+skie                    = "0.10.12"
 
 # Code quality — see ADR-013
 detekt                  = "1.23.7"
@@ -92,7 +93,7 @@ koin-core                       = { module = "io.insert-koin:koin-core", version
 koin-android                    = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose           = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-annotations                = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
-koin-ksp-compiler               = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-ksp-compiler               = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-ksp-compiler" }
 koin-test                       = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 # Kermit
