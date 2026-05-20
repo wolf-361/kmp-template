@@ -16,25 +16,19 @@ import org.koin.core.annotation.Single
 class AuthModule {
 
     @Single
-    fun provideOAuthRepository(
-        networkClient: NetworkClient,
-        tokenProvider: TokenProvider,
-    ): OAuthRepository = OAuthRepositoryImpl(networkClient, tokenProvider)
+    fun provideOAuthRepository(networkClient: NetworkClient, tokenProvider: TokenProvider): OAuthRepository =
+        OAuthRepositoryImpl(networkClient, tokenProvider)
 
     // OAuthFlowLauncher is registered per-platform when starting Koin
     // (AndroidOAuthFlowLauncher / IOSOAuthFlowLauncher)
 
     @Factory
-    fun provideLoginUseCase(
-        repository: OAuthRepository,
-        launcher: OAuthFlowLauncher,
-    ): LoginUseCase = LoginUseCase(repository, launcher)
+    fun provideLoginUseCase(repository: OAuthRepository, launcher: OAuthFlowLauncher): LoginUseCase =
+        LoginUseCase(repository, launcher)
 
     @Factory
-    fun provideLogoutUseCase(repository: OAuthRepository): LogoutUseCase =
-        LogoutUseCase(repository)
+    fun provideLogoutUseCase(repository: OAuthRepository): LogoutUseCase = LogoutUseCase(repository)
 
     @Factory
-    fun provideRefreshTokenUseCase(repository: OAuthRepository): RefreshTokenUseCase =
-        RefreshTokenUseCase(repository)
+    fun provideRefreshTokenUseCase(repository: OAuthRepository): RefreshTokenUseCase = RefreshTokenUseCase(repository)
 }

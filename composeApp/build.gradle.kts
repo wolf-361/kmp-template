@@ -56,14 +56,9 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(libs.compose.material3)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.navigation.compose)
-}
-
-// Auto-install the pre-commit hook on every Android build
-// The hook itself only touches staged files, so it stays fast (see ADR-013)
-tasks.named("preBuild") {
-    dependsOn(rootProject.tasks.named("installGitHooks"))
 }

@@ -10,7 +10,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
-    alias(libs.plugins.libres)
     alias(libs.plugins.mokkery)
     alias(libs.plugins.skie)
 }
@@ -105,9 +104,15 @@ kotlin {
     }
 }
 
-// Make KSP metadata generation run before any compilation task
+// Make KSP metadata generation run before any compilation or per-platform KSP task —
+// platform KSP tasks read from its output directory but Gradle can't infer the dependency automatically
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
     if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+tasks.configureEach {
+    if (name != "kspCommonMainKotlinMetadata" && name.startsWith("ksp")) {
         dependsOn("kspCommonMainKotlinMetadata")
     }
 }
@@ -117,14 +122,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().con
 room {
     // Schema files committed to git — required for AutoMigrations
     schemaDirectory("$projectDir/schemas")
-}
-
-// ─── Libres (string resources) ───────────────────────────────────────────────
-
-libres {
-    generatedClassName = "Res"
-    generateNamedArguments = true
-    baseLocaleLanguageCode = "en"
 }
 
 // ─── KSP ─────────────────────────────────────────────────────────────────────

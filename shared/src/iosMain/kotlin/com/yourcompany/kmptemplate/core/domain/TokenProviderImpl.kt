@@ -8,6 +8,7 @@ import kotlinx.cinterop.ptr
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.value
 import platform.CoreFoundation.CFDictionaryRef
+import platform.Foundation.NSCopyingProtocol
 import platform.Foundation.NSData
 import platform.Foundation.NSMutableDictionary
 import platform.Foundation.NSNumber
@@ -50,16 +51,16 @@ actual class TokenProviderImpl actual constructor() : TokenProvider {
 
     @Suppress("UNCHECKED_CAST")
     private fun buildQuery(key: String): NSMutableDictionary = NSMutableDictionary().also { d ->
-        d.setObject(kSecClassGenericPassword!!, forKey = kSecClass as Any)
-        d.setObject(SERVICE, forKey = kSecAttrService as Any)
-        d.setObject(key, forKey = kSecAttrAccount as Any)
+        d.setObject(kSecClassGenericPassword!!, forKey = kSecClass as NSCopyingProtocol)
+        d.setObject(SERVICE, forKey = kSecAttrService as NSCopyingProtocol)
+        d.setObject(key, forKey = kSecAttrAccount as NSCopyingProtocol)
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun keychainGet(key: String): String? = memScoped {
         val query = buildQuery(key).also { d ->
-            d.setObject(NSNumber(bool = true), forKey = kSecReturnData as Any)
-            d.setObject(kSecMatchLimitOne!!, forKey = kSecMatchLimit as Any)
+            d.setObject(NSNumber(bool = true), forKey = kSecReturnData as NSCopyingProtocol)
+            d.setObject(kSecMatchLimitOne!!, forKey = kSecMatchLimit as NSCopyingProtocol)
         }
         val result = alloc<ObjCObjectVar<Any?>>()
         val status = SecItemCopyMatching(query as CFDictionaryRef, result.ptr.reinterpret())
@@ -73,10 +74,12 @@ actual class TokenProviderImpl actual constructor() : TokenProvider {
         val data = (value as NSString).dataUsingEncoding(NSUTF8StringEncoding) ?: return
         val searchQuery = buildQuery(key)
         if (SecItemCopyMatching(searchQuery as CFDictionaryRef, null) == errSecSuccess) {
-            val update = NSMutableDictionary().also { d -> d.setObject(data, forKey = kSecValueData as Any) }
+            val update = NSMutableDictionary().also { d ->
+                d.setObject(data, forKey = kSecValueData as NSCopyingProtocol)
+            }
             SecItemUpdate(searchQuery as CFDictionaryRef, update as CFDictionaryRef)
         } else {
-            searchQuery.setObject(data, forKey = kSecValueData as Any)
+            searchQuery.setObject(data, forKey = kSecValueData as NSCopyingProtocol)
             SecItemAdd(searchQuery as CFDictionaryRef, null)
         }
     }

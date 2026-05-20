@@ -20,10 +20,7 @@ import com.yourcompany.kmptemplate.core.navigation.TopLevelGraph
 // <create-feature:import> — imports added by create-feature.sh go here
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController,
-    globalEffectsHandler: GlobalUiEffectsHandler,
-) {
+fun AppNavHost(navController: NavHostController, globalEffectsHandler: GlobalUiEffectsHandler) {
     LaunchedEffect(Unit) {
         globalEffectsHandler.effects.collect { effect ->
             when (effect) {

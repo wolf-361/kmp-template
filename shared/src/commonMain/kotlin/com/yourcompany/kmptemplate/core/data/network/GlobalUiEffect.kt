@@ -12,6 +12,7 @@ sealed interface GlobalUiEffect {
     data class NavigateBackTo(val destination: Destination, val inclusive: Boolean) : GlobalUiEffect
     data class ShowToast(val message: String) : GlobalUiEffect
     data class ShowSnackbar(val message: String) : GlobalUiEffect
+
     // Emitted by NetworkClientImpl when token refresh fails — navigates to Login and clears back stack
     data object Unauthorized : GlobalUiEffect
 }

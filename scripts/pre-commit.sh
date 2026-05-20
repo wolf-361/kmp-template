@@ -23,7 +23,7 @@ echo "pre-commit: running quality checks on staged Kotlin files..."
 # Unit tests — only for modules with staged changes
 if echo "$STAGED_KT" | grep -q "^shared/"; then
   echo "pre-commit: running :shared unit tests..."
-  ./gradlew :shared:testDebugUnitTest --daemon --quiet
+  ./gradlew :shared:testAndroidHostTest --daemon --quiet
 fi
 
 if echo "$STAGED_KT" | grep -q "^composeApp/"; then

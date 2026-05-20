@@ -28,14 +28,11 @@ abstract class BaseViewModelTest {
         Dispatchers.resetMain()
     }
 
-    protected fun runTest(block: suspend TestScope.() -> Unit) =
-        testScope.runTest(testBody = block)
+    protected fun runTest(block: suspend TestScope.() -> Unit) = testScope.runTest(testBody = block)
 
-    protected suspend fun <S, A, E> BaseViewModel<S, A, E>.awaitState(
-        block: suspend (S) -> Unit,
-    ) = state.test { block(awaitItem()) }
+    protected suspend fun <S, A, E> BaseViewModel<S, A, E>.awaitState(block: suspend (S) -> Unit) =
+        state.test { block(awaitItem()) }
 
-    protected suspend fun <S, A, E> BaseViewModel<S, A, E>.awaitEffect(
-        block: suspend (E) -> Unit,
-    ) = effects.test { block(awaitItem()) }
+    protected suspend fun <S, A, E> BaseViewModel<S, A, E>.awaitEffect(block: suspend (E) -> Unit) =
+        effects.test { block(awaitItem()) }
 }

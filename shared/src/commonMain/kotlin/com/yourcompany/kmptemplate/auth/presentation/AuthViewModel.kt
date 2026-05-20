@@ -11,10 +11,7 @@ import com.yourcompany.kmptemplate.core.presentation.BaseViewModel
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Factory
 
-data class AuthState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-)
+data class AuthState(val isLoading: Boolean = false, val error: String? = null)
 
 sealed interface AuthAction {
     data class LoginWith(val provider: OAuthProvider) : AuthAction
@@ -24,10 +21,8 @@ sealed interface AuthAction {
 sealed interface AuthEffect
 
 @Factory
-class AuthViewModel(
-    private val loginUseCase: LoginUseCase,
-    private val logoutUseCase: LogoutUseCase,
-) : BaseViewModel<AuthState, AuthAction, AuthEffect>(AuthState()) {
+class AuthViewModel(private val loginUseCase: LoginUseCase, private val logoutUseCase: LogoutUseCase) :
+    BaseViewModel<AuthState, AuthAction, AuthEffect>(AuthState()) {
 
     override fun onAction(action: AuthAction) {
         when (action) {

@@ -8,8 +8,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import platform.AuthenticationServices.ASWebAuthenticationPresentationContextProvidingProtocol
 import platform.AuthenticationServices.ASWebAuthenticationSession
-import platform.Foundation.NSURLComponents
 import platform.Foundation.NSURL
+import platform.Foundation.NSURLComponents
 import platform.UIKit.UIApplication
 import platform.UIKit.UIWindow
 import platform.darwin.NSObject
@@ -66,9 +66,10 @@ class IOSOAuthFlowLauncher : OAuthFlowLauncher {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private class AppWindowProvider : NSObject(), ASWebAuthenticationPresentationContextProvidingProtocol {
+private class AppWindowProvider :
+    NSObject(),
+    ASWebAuthenticationPresentationContextProvidingProtocol {
     @Suppress("DEPRECATION")
-    override fun presentationAnchorForWebAuthenticationSession(
-        session: ASWebAuthenticationSession,
-    ): UIWindow = UIApplication.sharedApplication.keyWindow ?: UIWindow()
+    override fun presentationAnchorForWebAuthenticationSession(session: ASWebAuthenticationSession): UIWindow =
+        UIApplication.sharedApplication.keyWindow ?: UIWindow()
 }

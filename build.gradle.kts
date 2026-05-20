@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.skie) apply false
-    alias(libs.plugins.libres) apply false
     alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.spotless) apply false
@@ -34,7 +33,10 @@ subprojects {
             target("**/*.kt")
             targetExclude("**/build/**/*.kt", "**/generated/**/*.kt")
             ktlint(libs.versions.ktlint.get()).editorConfigOverride(
-                mapOf("max_line_length" to "120"),
+                mapOf(
+                    "max_line_length" to "120",
+                    "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                ),
             )
         }
         kotlinGradle {

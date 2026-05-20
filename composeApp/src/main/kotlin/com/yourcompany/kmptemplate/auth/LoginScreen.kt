@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -26,9 +25,7 @@ import com.yourcompany.kmptemplate.auth.presentation.AuthViewModel
 import org.koin.java.KoinJavaComponent.getKoin
 
 @Composable
-fun LoginScreen(
-    viewModel: AuthViewModel = remember { getKoin().get() },
-) {
+fun LoginScreen(viewModel: AuthViewModel = remember { getKoin().get() }) {
     val state by viewModel.state.collectAsState()
 
     Column(

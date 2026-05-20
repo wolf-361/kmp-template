@@ -24,16 +24,13 @@ sqlite-bundled          = "2.5.0"   # KMP SQLite driver for iOS (bundled, no sys
 datastore               = "1.2.0"
 
 # DI — see ADR-007
-# Koin 4.x merged versioning for koin-annotations jar only; koin-ksp-compiler stays on 2.x
+# koin-annotations 4.x dropped org.koin.meta.annotations (used by koin-ksp-compiler) — stay on 2.x for KSP approach
 koin                    = "4.2.1"
-koin-annotations        = "4.2.1"
-koin-ksp-compiler       = "2.3.1"    # koin-ksp-compiler has NOT merged to 4.x — stays on 2.x
+koin-annotations        = "2.3.1"    # must stay in sync with koin-ksp-compiler (both 2.x)
+koin-ksp-compiler       = "2.3.1"    # generates code against org.koin.meta.annotations only in koin-annotations 2.x
 
 # Logging — see ADR-002
 kermit                  = "2.0.5"
-
-# Resources — see ADR-001
-libres                  = "1.2.2"
 
 # Swift interop — see ADR-012
 skie                    = "0.10.12"
@@ -44,7 +41,7 @@ spotless                = "8.0.0"
 ktlint                  = "1.5.0"
 
 # Testing — see ADR-011
-mokkery                 = "3.0.0"
+mokkery                 = "3.3.0"
 kotest                  = "6.0.0"
 turbine                 = "1.2.0"
 robolectric             = "4.16.1"
@@ -126,7 +123,6 @@ compose-multiplatform       = { id = "org.jetbrains.compose", version.ref = "com
 ksp                         = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room                        = { id = "androidx.room", version.ref = "room" }
 skie                        = { id = "co.touchlab.skie", version.ref = "skie" }
-libres                      = { id = "io.github.skeptick.libres", version.ref = "libres" }
 detekt                      = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 spotless                    = { id = "com.diffplug.spotless", version.ref = "spotless" }
 mokkery                     = { id = "dev.mokkery", version.ref = "mokkery" }

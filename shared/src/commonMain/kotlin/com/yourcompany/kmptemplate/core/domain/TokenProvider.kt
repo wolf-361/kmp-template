@@ -8,4 +8,5 @@ interface TokenProvider {
     suspend fun clearTokens()
 }
 
+@Suppress("ABSTRACT_MEMBER_NOT_IMPLEMENTED")
 expect class TokenProviderImpl() : TokenProvider

@@ -7,9 +7,9 @@ import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
 import com.yourcompany.kmptemplate.di.AuthModule
 import com.yourcompany.kmptemplate.di.CoreModule
 import org.koin.core.context.startKoin
-import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
+import org.koin.mp.KoinPlatform
 
 fun initKoin() {
     startKoin {
@@ -22,8 +22,6 @@ fun initKoin() {
 }
 
 // Convenience accessors for the iOS app layer — avoids raw Koin API from Swift.
-fun getGlobalUiEffectsHandler(): GlobalUiEffectsHandler =
-    GlobalContext.get().get()
+fun getGlobalUiEffectsHandler(): GlobalUiEffectsHandler = KoinPlatform.getKoin().get()
 
-fun getAuthViewModel(): AuthViewModel =
-    GlobalContext.get().get()
+fun getAuthViewModel(): AuthViewModel = KoinPlatform.getKoin().get()
