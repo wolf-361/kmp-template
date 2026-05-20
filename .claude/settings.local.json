@@ -78,7 +78,8 @@
       "Bash(cp scripts/pre-commit.sh .git/hooks/pre-commit)",
       "Bash(chmod +x .git/hooks/pre-commit)",
       "Bash(./gradlew :composeApp:compileDebugKotlin --no-configuration-cache)",
-      "Bash(./gradlew :composeApp:testDebugUnitTest --no-configuration-cache)"
+      "Bash(./gradlew :composeApp:testDebugUnitTest --no-configuration-cache)",
+      "Bash(./gradlew :androidApp:testDebugUnitTest --no-configuration-cache)"
     ]
   }
 }

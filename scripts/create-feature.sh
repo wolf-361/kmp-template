@@ -10,7 +10,7 @@
 #
 # What it creates:
 #   shared/commonMain  — domain model, repository interface, repository impl, ViewModel + MVI contracts
-#   composeApp         — Compose screen skeleton
+#   androidApp         — Compose screen skeleton
 #   iosApp             — SwiftUI view skeleton
 #   Destination.kt     — new sealed interface entry
 #   AppNavHost.kt      — composable entry + navigate() dispatch case
@@ -72,14 +72,14 @@ FEATURE_PASCAL=$(to_pascal "$RAW_NAME")
 
 # ─── Detect current package from applicationId ────────────────────────────────
 
-APP_ID=$(grep 'applicationId' composeApp/build.gradle.kts \
+APP_ID=$(grep 'applicationId' androidApp/build.gradle.kts \
     | grep -o '"[^"]*"' | tr -d '"' | head -1)
-[[ -n "$APP_ID" ]] || die "Could not read applicationId from composeApp/build.gradle.kts"
+[[ -n "$APP_ID" ]] || die "Could not read applicationId from androidApp/build.gradle.kts"
 
 PKG="$APP_ID"                                   # com.acme.myapp
 PKG_PATH="${PKG//.//}"                          # com/acme/myapp
 SHARED_SRC="shared/src/commonMain/kotlin/${PKG_PATH}"
-ANDROID_SRC="composeApp/src/main/kotlin/${PKG_PATH}"
+ANDROID_SRC="androidApp/src/main/kotlin/${PKG_PATH}"
 IOS_SRC="iosApp/iosApp"
 
 DEST_FILE="${SHARED_SRC}/core/navigation/Destination.kt"

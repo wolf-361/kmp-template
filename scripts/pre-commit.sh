@@ -26,9 +26,9 @@ if echo "$STAGED_KT" | grep -q "^shared/"; then
   ./gradlew :shared:testAndroidHostTest --daemon --quiet
 fi
 
-if echo "$STAGED_KT" | grep -q "^composeApp/"; then
-  echo "pre-commit: running :composeApp unit tests..."
-  ./gradlew :composeApp:testDebugUnitTest --daemon --quiet
+if echo "$STAGED_KT" | grep -q "^androidApp/"; then
+  echo "pre-commit: running :androidApp unit tests..."
+  ./gradlew :androidApp:testDebugUnitTest --daemon --quiet
 fi
 
 echo "pre-commit: all checks passed."
