@@ -7,7 +7,7 @@
 
 ## Goal
 
-Add a proper theme system (light / dark / system) to the template, persisted via DataStore and surfaced through a `SettingsViewModel` that both Android and iOS consume. Fix the Android `LoginScreen` preview gap at the same time.
+Add a proper theme system (light / dark / system + opt-in Dynamic Color on Android) to the template, persisted via DataStore and surfaced through a `SettingsViewModel` that both Android and iOS consume. Fix the Android `LoginScreen` preview gap at the same time.
 
 ## Architecture
 
@@ -37,23 +37,33 @@ Lives under `settings/domain/model/`, not `core/` — it is a settings concern, 
 ```kotlin
 interface SettingsRepository {
     val themeMode: Flow<ThemeMode>
+    val useDynamicColor: Flow<Boolean>
     suspend fun setThemeMode(mode: ThemeMode)
+    suspend fun setUseDynamicColor(enabled: Boolean)
 }
 ```
 
 **`settings/data/repository/SettingsRepositoryImpl.kt`**
-DataStore-backed implementation. Key: `stringPreferencesKey("theme_mode")`, value: enum name string. Defaults to `ThemeMode.SYSTEM` when no value is stored.
+DataStore-backed implementation. Keys: `stringPreferencesKey("theme_mode")` and `booleanPreferencesKey("use_dynamic_color")`. `ThemeMode` defaults to `SYSTEM`; `useDynamicColor` defaults to `false` (opt-in).
 
 ```kotlin
 @Single
 class SettingsRepositoryImpl(private val dataStore: DataStore<Preferences>) : SettingsRepository {
-    private val key = stringPreferencesKey("theme_mode")
+    private val themeModeKey = stringPreferencesKey("theme_mode")
+    private val dynamicColorKey = booleanPreferencesKey("use_dynamic_color")
 
     override val themeMode: Flow<ThemeMode> = dataStore.data
-        .map { prefs -> ThemeMode.fromKey(prefs[key]) }
+        .map { prefs -> ThemeMode.fromKey(prefs[themeModeKey]) }
+
+    override val useDynamicColor: Flow<Boolean> = dataStore.data
+        .map { prefs -> prefs[dynamicColorKey] ?: false }
 
     override suspend fun setThemeMode(mode: ThemeMode) {
-        dataStore.edit { it[key] = mode.name }
+        dataStore.edit { it[themeModeKey] = mode.name }
+    }
+
+    override suspend fun setUseDynamicColor(enabled: Boolean) {
+        dataStore.edit { it[dynamicColorKey] = enabled }
     }
 }
 ```
@@ -73,17 +83,36 @@ open class SetThemeModeUseCase(private val repository: SettingsRepository) {
     open suspend operator fun invoke(mode: ThemeMode) = repository.setThemeMode(mode)
 }
 ```
-Marked `open` for Mokkery mocking in tests (consistent with auth use cases).
+
+**`settings/domain/usecase/GetUseDynamicColorUseCase.kt`**
+```kotlin
+class GetUseDynamicColorUseCase(private val repository: SettingsRepository) {
+    operator fun invoke(): Flow<Boolean> = repository.useDynamicColor
+}
+```
+
+**`settings/domain/usecase/SetUseDynamicColorUseCase.kt`**
+```kotlin
+open class SetUseDynamicColorUseCase(private val repository: SettingsRepository) {
+    open suspend operator fun invoke(enabled: Boolean) = repository.setUseDynamicColor(enabled)
+}
+```
+
+All use cases marked `open` for Mokkery mocking in tests (consistent with auth use cases).
 
 **`settings/presentation/SettingsState.kt`**
 ```kotlin
-data class SettingsState(val themeMode: ThemeMode = ThemeMode.SYSTEM)
+data class SettingsState(
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    val useDynamicColor: Boolean = false,
+)
 ```
 
 **`settings/presentation/SettingsAction.kt`**
 ```kotlin
 sealed interface SettingsAction {
     data class SetThemeMode(val mode: ThemeMode) : SettingsAction
+    data class SetUseDynamicColor(val enabled: Boolean) : SettingsAction
 }
 ```
 
@@ -93,17 +122,25 @@ sealed interface SettingsAction {
 class SettingsViewModel(
     private val getThemeMode: GetThemeModeUseCase,
     private val setThemeMode: SetThemeModeUseCase,
+    private val getUseDynamicColor: GetUseDynamicColorUseCase,
+    private val setUseDynamicColor: SetUseDynamicColorUseCase,
 ) : BaseViewModel<SettingsState, SettingsAction, Nothing>(SettingsState()) {
 
     init {
         viewModelScope.launch {
             getThemeMode().collect { setState { copy(themeMode = it) } }
         }
+        viewModelScope.launch {
+            getUseDynamicColor().collect { setState { copy(useDynamicColor = it) } }
+        }
     }
 
     override fun onAction(action: SettingsAction) {
         when (action) {
-            is SettingsAction.SetThemeMode -> viewModelScope.launch { setThemeMode(action.mode) }
+            is SettingsAction.SetThemeMode ->
+                viewModelScope.launch { setThemeMode(action.mode) }
+            is SettingsAction.SetUseDynamicColor ->
+                viewModelScope.launch { setUseDynamicColor(action.enabled) }
         }
     }
 }
@@ -142,6 +179,7 @@ Full Material3 light and dark `ColorScheme` token definitions generated from a n
 @Composable
 fun AppTheme(
     themeMode: ThemeMode = ThemeMode.SYSTEM,
+    useDynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val useDark = when (themeMode) {
@@ -150,7 +188,7 @@ fun AppTheme(
         ThemeMode.DARK   -> true
     }
     val colorScheme = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val ctx = LocalContext.current
             if (useDark) dynamicDarkColorScheme(ctx) else dynamicLightColorScheme(ctx)
         }
@@ -160,21 +198,25 @@ fun AppTheme(
     MaterialTheme(colorScheme = colorScheme, typography = AppTypography, content = content)
 }
 ```
-Dynamic Color (Material You) on API 31+; static `lightScheme`/`darkScheme` fallback on older devices.
+Dynamic Color (Material You) is opt-in: only applied when `useDynamicColor = true` **and** the device is API 31+. Static `lightScheme`/`darkScheme` otherwise. The toggle is hidden in `SettingsScreen` on devices below API 31.
 
 **`settings/SettingsRoute.kt`**
 Koin-aware entry point: `koinViewModel<SettingsViewModel>()`, collects state, delegates to `SettingsScreen`.
 
 **`settings/SettingsScreen.kt`**
-Pure composable — takes `SettingsState` and `(SettingsAction) -> Unit`. Shows a `ThemeMode` segmented/radio picker (System / Light / Dark). Includes `@Preview` for each mode. Clearly marked with a comment that this is the stub to extend.
+Pure composable — takes `SettingsState` and `(SettingsAction) -> Unit`. Shows:
+1. A `ThemeMode` segmented/radio picker (System / Light / Dark)
+2. A "Use Dynamic Colors" `Switch` toggle — only rendered when `Build.VERSION.SDK_INT >= S`, hidden otherwise
+
+Includes `@Preview` for each mode. Clearly marked with a comment that this is the stub to extend.
 
 ### Modified files
 
 **`MainActivity.kt`**
 - Add `enableEdgeToEdge()`
 - Get `SettingsViewModel` via `koinViewModel()`
-- Collect `themeMode` from its state with `collectAsState()`
-- Pass into `AppTheme(themeMode = themeMode) { AppNavHost(...) }`
+- Collect `state` from it with `collectAsState()`
+- Pass into `AppTheme(themeMode = state.themeMode, useDynamicColor = state.useDynamicColor) { AppNavHost(...) }`
 
 **`AppNavHost.kt`**
 - Replace `PlaceholderScreen("Settings")` with `SettingsRoute()`
@@ -228,22 +270,21 @@ SwiftUI `View` with a `Picker` for SYSTEM/LIGHT/DARK bound to `settingsHolder.st
 
 ```
 DataStore
-  └─ SettingsRepositoryImpl.themeMode: Flow<ThemeMode>
-       └─ GetThemeModeUseCase()
-            └─ SettingsViewModel.state: StateFlow<SettingsState>
-                 ├─ Android: MainActivity collects themeMode → AppTheme(themeMode)
-                 └─ iOS: SettingsViewModelHolder publishes state → RootView.preferredColorScheme
+  ├─ SettingsRepositoryImpl.themeMode: Flow<ThemeMode>
+  │    └─ GetThemeModeUseCase()  ─┐
+  └─ SettingsRepositoryImpl.useDynamicColor: Flow<Boolean>
+       └─ GetUseDynamicColorUseCase()  ─┤
+                                        └─ SettingsViewModel.state: StateFlow<SettingsState>
+                                             ├─ Android: MainActivity → AppTheme(themeMode, useDynamicColor)
+                                             └─ iOS: SettingsViewModelHolder → RootView.preferredColorScheme
+                                                      (useDynamicColor ignored on iOS)
 ```
 
 On write:
 ```
-User taps theme option
-  → SettingsAction.SetThemeMode(mode)
-  → SettingsViewModel.onAction
-  → SetThemeModeUseCase(mode)
-  → SettingsRepositoryImpl.setThemeMode
-  → DataStore.edit
-  → Flow emits new value → all collectors update
+User taps theme option   → SettingsAction.SetThemeMode(mode)      → SetThemeModeUseCase
+User toggles dyn. color  → SettingsAction.SetUseDynamicColor(bool) → SetUseDynamicColorUseCase
+  → SettingsRepositoryImpl → DataStore.edit → Flow emits → all collectors update
 ```
 
 ---
@@ -259,9 +300,11 @@ User taps theme option
 
 ## Testing
 
-- `SetThemeModeUseCaseTest` — delegates to repository (follows existing use case test pattern)
 - `GetThemeModeUseCaseTest` — delegates to repository
-- `SettingsViewModelTest` — uses `BaseViewModelTest`, fakes repository with Mokkery mock
+- `SetThemeModeUseCaseTest` — delegates to repository
+- `GetUseDynamicColorUseCaseTest` — delegates to repository
+- `SetUseDynamicColorUseCaseTest` — delegates to repository
+- `SettingsViewModelTest` — uses `BaseViewModelTest`, mocks all four use cases with Mokkery
 - `SettingsScreen` `@Preview` — light / dark / system variants visible in Android Studio
 
 No iOS UI tests — out of scope for the template.
