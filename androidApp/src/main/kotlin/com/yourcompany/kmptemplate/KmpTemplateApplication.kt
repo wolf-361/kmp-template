@@ -6,6 +6,7 @@ import com.yourcompany.kmptemplate.auth.domain.port.OAuthFlowLauncher
 import com.yourcompany.kmptemplate.core.data.local.appContext
 import com.yourcompany.kmptemplate.di.AuthModule
 import com.yourcompany.kmptemplate.di.CoreModule
+import com.yourcompany.kmptemplate.di.SettingsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -22,6 +23,7 @@ class KmpTemplateApplication : Application() {
             modules(
                 CoreModule().module,
                 AuthModule().module,
+                SettingsModule().module,
                 module { single<OAuthFlowLauncher> { AndroidOAuthFlowLauncher() } },
             )
         }

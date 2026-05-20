@@ -6,6 +6,8 @@ import com.yourcompany.kmptemplate.auth.presentation.AuthViewModel
 import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
 import com.yourcompany.kmptemplate.di.AuthModule
 import com.yourcompany.kmptemplate.di.CoreModule
+import com.yourcompany.kmptemplate.di.SettingsModule
+import com.yourcompany.kmptemplate.settings.presentation.SettingsViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.ksp.generated.module
@@ -16,6 +18,7 @@ fun initKoin() {
         modules(
             CoreModule().module,
             AuthModule().module,
+            SettingsModule().module,
             module { single<OAuthFlowLauncher> { IOSOAuthFlowLauncher() } },
         )
     }
@@ -25,3 +28,5 @@ fun initKoin() {
 fun getGlobalUiEffectsHandler(): GlobalUiEffectsHandler = KoinPlatform.getKoin().get()
 
 fun getAuthViewModel(): AuthViewModel = KoinPlatform.getKoin().get()
+
+fun getSettingsViewModel(): SettingsViewModel = KoinPlatform.getKoin().get()
