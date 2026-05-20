@@ -7,8 +7,8 @@ import com.yourcompany.kmptemplate.auth.domain.repository.OAuthRepository
 import com.yourcompany.kmptemplate.core.domain.AppResult
 import com.yourcompany.kmptemplate.core.domain.CoreError
 
-class LoginUseCase(private val repository: OAuthRepository, private val flowLauncher: OAuthFlowLauncher) {
-    suspend operator fun invoke(provider: OAuthProvider, clientId: String): AppResult<Unit> {
+open class LoginUseCase(private val repository: OAuthRepository, private val flowLauncher: OAuthFlowLauncher) {
+    open suspend operator fun invoke(provider: OAuthProvider, clientId: String): AppResult<Unit> {
         val verifier = PkceGenerator.generateVerifier()
         val challenge = PkceGenerator.generateChallenge(verifier)
         val redirectUri = "kmptemplate://oauth/${provider.name.lowercase()}/callback"
