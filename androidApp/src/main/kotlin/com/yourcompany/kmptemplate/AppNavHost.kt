@@ -17,6 +17,7 @@ import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
 import com.yourcompany.kmptemplate.core.navigation.AuthDestination
 import com.yourcompany.kmptemplate.core.navigation.Destination
 import com.yourcompany.kmptemplate.core.navigation.TopLevelGraph
+import com.yourcompany.kmptemplate.settings.SettingsRoute
 // <create-feature:import> — imports added by create-feature.sh go here
 
 @Composable
@@ -44,7 +45,7 @@ fun AppNavHost(navController: NavHostController, globalEffectsHandler: GlobalUiE
         composable<AuthDestination.Login> { LoginRoute() }
         composable<AuthDestination.Register> { PlaceholderScreen("Register") }
         composable<TopLevelGraph.Dashboard> { PlaceholderScreen("Dashboard") }
-        composable<TopLevelGraph.Settings> { PlaceholderScreen("Settings") }
+        composable<TopLevelGraph.Settings> { SettingsRoute() }
         // <create-feature:composable> — composable entries added by create-feature.sh go here
     }
 }
