@@ -61,4 +61,6 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.navigation.compose)
+    implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
 }

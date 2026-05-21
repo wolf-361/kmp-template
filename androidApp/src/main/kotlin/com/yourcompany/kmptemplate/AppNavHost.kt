@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.yourcompany.kmptemplate.auth.LoginScreen
+import com.yourcompany.kmptemplate.auth.LoginRoute
 import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffect
 import com.yourcompany.kmptemplate.core.data.network.GlobalUiEffectsHandler
 import com.yourcompany.kmptemplate.core.navigation.AuthDestination
@@ -41,7 +41,7 @@ fun AppNavHost(navController: NavHostController, globalEffectsHandler: GlobalUiE
         navController = navController,
         startDestination = AuthDestination.Login,
     ) {
-        composable<AuthDestination.Login> { LoginScreen() }
+        composable<AuthDestination.Login> { LoginRoute() }
         composable<AuthDestination.Register> { PlaceholderScreen("Register") }
         composable<TopLevelGraph.Dashboard> { PlaceholderScreen("Dashboard") }
         composable<TopLevelGraph.Settings> { PlaceholderScreen("Settings") }
