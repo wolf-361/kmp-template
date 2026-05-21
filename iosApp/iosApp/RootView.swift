@@ -6,6 +6,8 @@ import shared
 // per-feature deep navigation stays encapsulated.
 struct RootView: View {
     @State private var current: AppScreen = .auth
+    @State private var showSettings = false
+    @StateObject private var settingsHolder = SettingsViewModelHolder()
 
     private let effectsHandler: GlobalUiEffectsHandler
 
@@ -17,9 +19,20 @@ struct RootView: View {
         Group {
             switch current {
             case .auth: AuthNavStack()
-            case .dashboard: DashboardNavStack()
+            case .dashboard: DashboardNavStack(showSettings: $showSettings)
             }
         }
+        .sheet(isPresented: $showSettings) {
+            NavigationStack {
+                SettingsView()
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { showSettings = false }
+                        }
+                    }
+            }
+        }
+        .preferredColorScheme(settingsHolder.state.themeMode.preferredColorScheme)
         .task { await observeGlobalEffects() }
     }
 
@@ -66,10 +79,21 @@ private struct AuthNavStack: View {
 }
 
 private struct DashboardNavStack: View {
+    @Binding var showSettings: Bool
+
     var body: some View {
         NavigationStack {
             Text("Dashboard") // TODO: DashboardView
                 .navigationTitle("Dashboard")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gear")
+                        }
+                    }
+                }
         }
     }
 }

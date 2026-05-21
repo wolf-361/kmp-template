@@ -9,12 +9,22 @@
 /* Begin PBXBuildFile section */
 		AA0000000000000000000101 /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000201; };
 		AA0000000000000000000102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000202; };
+		2111DF8AB9DE44F3908DB52B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD87DC8D55424D3DA3C18689; };
+		2DE439F4EB8547D2AB0497DE /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC431AE7157E44A3A3B11E6B; };
+		D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D55FDAC040D6A1628572; };
+		0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82912B783A2C4006B5E751A3; };
+		EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2598D04A6C244116ACABB241; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA0000000000000000000200 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000201 /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		AA0000000000000000000202 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BD87DC8D55424D3DA3C18689 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		DC431AE7157E44A3A3B11E6B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		7D72D55FDAC040D6A1628572 /* ThemeMode+ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeMode+ColorScheme.swift"; sourceTree = "<group>"; };
+		82912B783A2C4006B5E751A3 /* SettingsViewModelHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelHolder.swift; sourceTree = "<group>"; };
+		2598D04A6C244116ACABB241 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,8 +51,61 @@
 			children = (
 				AA0000000000000000000201 /* iOSApp.swift */,
 				AA0000000000000000000202 /* ContentView.swift */,
+				BD87DC8D55424D3DA3C18689 /* RootView.swift */,
+				E95C0CADDC5849AFBD7A7913 /* auth */,
+				0CDBD11C83534A3AB97BF219 /* Core */,
+				0CCD914847BD420BA4175242 /* Features */,
 			);
 			path = iosApp;
+			sourceTree = "<group>";
+		};
+		E95C0CADDC5849AFBD7A7913 /* auth */ = {
+			isa = PBXGroup;
+			children = (
+				DC431AE7157E44A3A3B11E6B /* LoginView.swift */,
+			);
+			path = auth;
+			sourceTree = "<group>";
+		};
+		0CDBD11C83534A3AB97BF219 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				1F155BCC752C421DBC9E8F16 /* UI */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		1F155BCC752C421DBC9E8F16 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D3CCA040C2FE4CD68EB7620E /* Theme */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		D3CCA040C2FE4CD68EB7620E /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				7D72D55FDAC040D6A1628572 /* ThemeMode+ColorScheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		0CCD914847BD420BA4175242 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9A9A739E9B23475BB990AE63 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9A9A739E9B23475BB990AE63 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				82912B783A2C4006B5E751A3 /* SettingsViewModelHolder.swift */,
+				2598D04A6C244116ACABB241 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		AA0000000000000000000402 /* MainGroup */ = {
@@ -123,7 +186,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "#!/bin/bash\nset -e\n\ncd \"$SRCROOT/../..\"\n\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n  if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n    ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosSimulatorArm64/debugFramework\"\n  else\n    ./gradlew :shared:linkDebugFrameworkIosArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosArm64/debugFramework\"\n  fi\nelse\n  if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n    ./gradlew :shared:linkReleaseFrameworkIosSimulatorArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosSimulatorArm64/releaseFramework\"\n  else\n    ./gradlew :shared:linkReleaseFrameworkIosArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosArm64/releaseFramework\"\n  fi\nfi\n\necho \"KMP framework built at: $FRAMEWORK_PATH\"\n";
+			shellScript = "#!/bin/bash\nset -e\n\ncd \"$SRCROOT/..\"\n\nif [ \"$CONFIGURATION\" = \"Debug\" ]; then\n  if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n    ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosSimulatorArm64/debugFramework\"\n  else\n    ./gradlew :shared:linkDebugFrameworkIosArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosArm64/debugFramework\"\n  fi\nelse\n  if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n    ./gradlew :shared:linkReleaseFrameworkIosSimulatorArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosSimulatorArm64/releaseFramework\"\n  else\n    ./gradlew :shared:linkReleaseFrameworkIosArm64\n    FRAMEWORK_PATH=\"shared/build/bin/iosArm64/releaseFramework\"\n  fi\nfi\n\necho \"KMP framework built at: $FRAMEWORK_PATH\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -134,6 +197,11 @@
 			files = (
 				AA0000000000000000000101 /* iOSApp.swift in Sources */,
 				AA0000000000000000000102 /* ContentView.swift in Sources */,
+				2111DF8AB9DE44F3908DB52B /* RootView.swift in Sources */,
+				2DE439F4EB8547D2AB0497DE /* LoginView.swift in Sources */,
+				D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */,
+				0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */,
+				EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,8 +334,8 @@
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../shared/build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../../shared/build/bin/iosArm64/debugFramework",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableDescription = "KMP Template iOS App";
@@ -300,8 +368,8 @@
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../../shared/build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../../shared/build/bin/iosArm64/releaseFramework",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../shared/build/bin/iosArm64/releaseFramework",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableDescription = "KMP Template iOS App";

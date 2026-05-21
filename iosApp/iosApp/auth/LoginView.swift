@@ -46,7 +46,7 @@ private struct OAuthButton: View {
 
     var body: some View {
         Button(label) {
-            vm.onAction(action: AuthAction.LoginWith(provider: provider))
+            vm.onAction(action: AuthActionLoginWith(provider: provider))
         }
         .buttonStyle(.bordered)
         .frame(maxWidth: .infinity)
@@ -65,7 +65,7 @@ private final class AuthViewModelHolder: ObservableObject {
 
     private func observeState() async {
         for await s in viewModel.state {
-            state = s
+            if let s { state = s }
         }
     }
 }
