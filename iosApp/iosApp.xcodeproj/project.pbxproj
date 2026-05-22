@@ -14,6 +14,7 @@
 		D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D55FDAC040D6A1628572; };
 		0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82912B783A2C4006B5E751A3; };
 		EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2598D04A6C244116ACABB241; };
+		D1E2F3G4H5I6J7K8L9M0N1O2 /* ThemeMode+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430016EFC5E143ADB90DFC1E; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		7D72D55FDAC040D6A1628572 /* ThemeMode+ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeMode+ColorScheme.swift"; sourceTree = "<group>"; };
 		82912B783A2C4006B5E751A3 /* SettingsViewModelHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelHolder.swift; sourceTree = "<group>"; };
 		2598D04A6C244116ACABB241 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		430016EFC5E143ADB90DFC1E /* ThemeMode+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode+UI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				7D72D55FDAC040D6A1628572 /* ThemeMode+ColorScheme.swift */,
+				430016EFC5E143ADB90DFC1E /* ThemeMode+UI.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -214,6 +217,7 @@
 				D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */,
 				0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */,
 				EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */,
+				D1E2F3G4H5I6J7K8L9M0N1O2 /* ThemeMode+UI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
