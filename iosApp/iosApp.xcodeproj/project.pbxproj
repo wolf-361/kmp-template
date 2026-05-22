@@ -116,6 +116,18 @@
 			);
 			sourceTree = "<group>";
 		};
+		A303009ED78E4CBCB20EF372 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E389E0446EC14A4D958964E4 /* AppHeader.swift */,
+				8CB3464763144CF193C20A13 /* PrimaryButton.swift */,
+				62A4658CAB25474497C03CD3 /* OrDivider.swift */,
+				7939C97290394DF6AFDE2634 /* SettingsRow.swift */,
+				03F813BC09D64442B8175178 /* SelectableRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
