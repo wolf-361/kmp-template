@@ -81,7 +81,10 @@ fun SettingsScreen(state: SettingsState, onAction: (SettingsAction) -> Unit, mod
                     isSelected = state.themeMode == mode,
                     onClick = {
                         onAction(SettingsAction.SetThemeMode(mode))
-                        scope.launch { sheetState.hide() }.invokeOnCompletion { showThemeSheet = false }
+                        scope.launch {
+                            sheetState.hide()
+                            showThemeSheet = false
+                        }
                     },
                 )
             }

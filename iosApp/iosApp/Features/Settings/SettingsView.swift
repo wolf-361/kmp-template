@@ -22,7 +22,7 @@ struct SettingsView: View {
             NavigationStack {
                 List {
                     SelectableRow(
-                        label: "System",
+                        label: ThemeMode.system.displayName,
                         isSelected: holder.state.themeMode == .system,
                         action: {
                             holder.viewModel.onAction(
@@ -32,7 +32,7 @@ struct SettingsView: View {
                         }
                     )
                     SelectableRow(
-                        label: "Light",
+                        label: ThemeMode.light.displayName,
                         isSelected: holder.state.themeMode == .light,
                         action: {
                             holder.viewModel.onAction(
@@ -42,7 +42,7 @@ struct SettingsView: View {
                         }
                     )
                     SelectableRow(
-                        label: "Dark",
+                        label: ThemeMode.dark.displayName,
                         isSelected: holder.state.themeMode == .dark,
                         action: {
                             holder.viewModel.onAction(

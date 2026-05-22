@@ -28,7 +28,7 @@ fun SelectableRow(label: String, isSelected: Boolean, onClick: () -> Unit, modif
             .padding(horizontal = 16.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RadioButton(selected = isSelected, onClick = onClick)
+        RadioButton(selected = isSelected, onClick = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = label, style = MaterialTheme.typography.bodyLarge)
     }
