@@ -35,7 +35,7 @@ struct SettingsRow<Trailing: View>: View {
             if showChevron {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(Color(.tertiaryLabel))
+                    .foregroundStyle(Color(UIColor.tertiaryLabel))
             }
         }
         .contentShape(Rectangle())
