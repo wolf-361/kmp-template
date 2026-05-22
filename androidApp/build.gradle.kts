@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.compose.material3)
+    implementation(libs.material.icons.extended)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.activity.compose)
