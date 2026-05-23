@@ -16,8 +16,7 @@ class BearerAuthPlugin private constructor(private val tokenProvider: TokenProvi
     companion object Plugin : HttpClientPlugin<Config, BearerAuthPlugin> {
         override val key = AttributeKey<BearerAuthPlugin>("BearerAuth")
 
-        override fun prepare(block: Config.() -> Unit) =
-            BearerAuthPlugin(Config().apply(block).tokenProvider)
+        override fun prepare(block: Config.() -> Unit) = BearerAuthPlugin(Config().apply(block).tokenProvider)
 
         override fun install(plugin: BearerAuthPlugin, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.State) {

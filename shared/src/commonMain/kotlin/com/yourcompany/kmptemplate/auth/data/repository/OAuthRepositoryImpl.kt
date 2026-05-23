@@ -11,22 +11,21 @@ import com.yourcompany.kmptemplate.core.domain.AppResult
 import com.yourcompany.kmptemplate.core.domain.CoreError
 import com.yourcompany.kmptemplate.core.domain.TokenProvider
 import com.yourcompany.kmptemplate.core.domain.toUnit
-import io.ktor.client.request.contentType
+import io.ktor.client.request.header
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
-class OAuthRepositoryImpl(
-    private val networkClient: NetworkClient,
-    private val tokenProvider: TokenProvider,
-) : OAuthRepository {
+class OAuthRepositoryImpl(private val networkClient: NetworkClient, private val tokenProvider: TokenProvider) :
+    OAuthRepository {
 
     private val _token = MutableStateFlow<OAuthToken?>(null)
     override val token: Flow<OAuthToken?> = _token
@@ -35,23 +34,22 @@ class OAuthRepositoryImpl(
         CoroutineScope(Dispatchers.Default).launch { bootstrapToken() }
     }
 
-    override suspend fun login(
-        code: String,
-        codeVerifier: String,
-        provider: OAuthProvider,
-    ): AppResult<Unit> = networkClient.unauthorizedRequest<AuthResponse> {
-        method = HttpMethod.Post
-        url(AuthRoutes.OAUTH)
-        contentType(ContentType.Application.Json)
-        setBody(OAuthRequest(
-            code = code,
-            provider = provider.name.lowercase(),
-            codeVerifier = codeVerifier,
-            redirectUri = redirectUri(provider),
-        ))
-    }.also { result ->
-        if (result is AppResult.Success) persistToken(result.data)
-    }.toUnit()
+    override suspend fun login(code: String, codeVerifier: String, provider: OAuthProvider): AppResult<Unit> =
+        networkClient.unauthorizedRequest<AuthResponse> {
+            method = HttpMethod.Post
+            url(AuthRoutes.OAUTH)
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            setBody(
+                OAuthRequest(
+                    code = code,
+                    provider = provider.name.lowercase(),
+                    codeVerifier = codeVerifier,
+                    redirectUri = redirectUri(provider),
+                ),
+            )
+        }.also { result ->
+            if (result is AppResult.Success) persistToken(result.data)
+        }.toUnit()
 
     // Clears tokens only — local database is intentionally untouched (see ADR-003)
     override suspend fun logout(): AppResult<Unit> {

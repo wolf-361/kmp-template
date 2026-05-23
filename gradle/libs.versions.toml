@@ -1,12 +1,14 @@
 [versions]
 # Build toolchain — see ADR-014
-kotlin                  = "2.3.20"   # pinned: 2.3.21 not yet supported by SKIE (check touchlab/SKIE releases before bumping)
+kotlin                  = "2.3.21"   # SKIE 0.10.12 now supports 2.3.21
 agp                     = "9.1.1"
 # KSP switched to standalone semver in 2.3.x — no longer tied to Kotlin version string
-ksp                     = "2.3.7"
+ksp                     = "2.3.8"
 
 # Compose
 compose-multiplatform   = "1.10.3"
+# material-icons-extended: JetBrains CMP variant (org.jetbrains.compose.material), stable up to 1.7.3 on Maven Central
+material-icons-extended = "1.7.3"
 # material3 KMP has its own release cadence — does NOT match the CMP plugin version
 compose-material3-kmp   = "1.9.0"
 
@@ -24,18 +26,16 @@ sqlite-bundled          = "2.5.0"   # KMP SQLite driver for iOS (bundled, no sys
 datastore               = "1.2.0"
 
 # DI — see ADR-007
-# Koin and Koin Annotations merged versioning in 4.x
+# koin-annotations 4.x dropped org.koin.meta.annotations (used by koin-ksp-compiler) — stay on 2.x for KSP approach
 koin                    = "4.2.1"
-koin-annotations        = "4.2.1"
+koin-annotations        = "2.3.1"    # must stay in sync with koin-ksp-compiler (both 2.x)
+koin-ksp-compiler       = "2.3.1"    # generates code against org.koin.meta.annotations only in koin-annotations 2.x
 
 # Logging — see ADR-002
 kermit                  = "2.0.5"
 
-# Resources — see ADR-001
-libres                  = "1.2.2"
-
 # Swift interop — see ADR-012
-skie                    = "0.10.11"
+skie                    = "0.10.12"
 
 # Code quality — see ADR-013
 detekt                  = "1.23.7"
@@ -43,7 +43,7 @@ spotless                = "8.0.0"
 ktlint                  = "1.5.0"
 
 # Testing — see ADR-011
-mokkery                 = "3.0.0"
+mokkery                 = "3.3.0"
 kotest                  = "6.0.0"
 turbine                 = "1.2.0"
 robolectric             = "4.16.1"
@@ -63,6 +63,9 @@ compose-runtime              = { module = "org.jetbrains.compose.runtime:runtime
 compose-foundation           = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
 compose-material3            = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-material3-kmp" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-ui-tooling-preview   = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
+compose-ui-tooling           = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
+material-icons-extended      = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
 
 # KotlinX
 kotlinx-coroutines-core         = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -92,7 +95,7 @@ koin-core                       = { module = "io.insert-koin:koin-core", version
 koin-android                    = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose           = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-annotations                = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
-koin-ksp-compiler               = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-ksp-compiler               = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-ksp-compiler" }
 koin-test                       = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 # Kermit
@@ -125,7 +128,6 @@ compose-multiplatform       = { id = "org.jetbrains.compose", version.ref = "com
 ksp                         = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room                        = { id = "androidx.room", version.ref = "room" }
 skie                        = { id = "co.touchlab.skie", version.ref = "skie" }
-libres                      = { id = "io.github.skeptick.libres", version.ref = "libres" }
 detekt                      = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 spotless                    = { id = "com.diffplug.spotless", version.ref = "spotless" }
 mokkery                     = { id = "dev.mokkery", version.ref = "mokkery" }

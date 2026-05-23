@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import com.yourcompany.kmptemplate.auth.domain.port.OAuthFlowLauncher
 import com.yourcompany.kmptemplate.core.data.local.appContext
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 
 class AndroidOAuthFlowLauncher : OAuthFlowLauncher {
 
@@ -18,7 +18,7 @@ class AndroidOAuthFlowLauncher : OAuthFlowLauncher {
             .setShareState(CustomTabsIntent.SHARE_STATE_OFF)
             .build()
         tabIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        tabIntent.launchUrl(appContext, Uri.parse(authUrl))
+        tabIntent.launchUrl(checkNotNull(appContext) { "appContext not set" }, Uri.parse(authUrl))
 
         return try {
             deferred.await()

@@ -11,19 +11,19 @@ expect fun createHttpEngine(): HttpClientEngine
 
 abstract class NetworkClient {
 
-    protected abstract val httpClient: HttpClient
+    @PublishedApi
+    internal abstract val httpClient: HttpClient
 
-    protected abstract suspend fun <T> coreRequest(
+    @PublishedApi
+    internal abstract suspend fun <T> coreRequest(
         typeInfo: TypeInfo,
         block: HttpRequestBuilder.() -> Unit,
         shouldTriggerLogout: Boolean,
     ): AppResult<T>
 
-    suspend inline fun <reified T> request(
-        noinline block: HttpRequestBuilder.() -> Unit,
-    ): AppResult<T> = coreRequest(typeInfo<T>(), block, shouldTriggerLogout = true)
+    suspend inline fun <reified T> request(noinline block: HttpRequestBuilder.() -> Unit): AppResult<T> =
+        coreRequest(typeInfo<T>(), block, shouldTriggerLogout = true)
 
-    suspend inline fun <reified T> unauthorizedRequest(
-        noinline block: HttpRequestBuilder.() -> Unit,
-    ): AppResult<T> = coreRequest(typeInfo<T>(), block, shouldTriggerLogout = false)
+    suspend inline fun <reified T> unauthorizedRequest(noinline block: HttpRequestBuilder.() -> Unit): AppResult<T> =
+        coreRequest(typeInfo<T>(), block, shouldTriggerLogout = false)
 }

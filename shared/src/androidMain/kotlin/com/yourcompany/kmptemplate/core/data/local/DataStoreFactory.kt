@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import okio.Path.Companion.toPath
 
 // Set this in Application.onCreate() before Koin starts
-internal var appContext: Context? = null
+var appContext: Context? = null
 
 actual fun createDataStore(): DataStore<Preferences> {
     val ctx = checkNotNull(appContext) {

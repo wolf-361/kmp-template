@@ -9,11 +9,12 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.contentType
+import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
@@ -21,14 +22,12 @@ import io.ktor.util.reflect.TypeInfo
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 @Serializable
-private data class InternalRefreshRequest(
-    @SerialName("refresh_token") val refreshToken: String,
-)
+private data class InternalRefreshRequest(@SerialName("refresh_token") val refreshToken: String)
 
 @Serializable
 private data class InternalTokenResponse(
@@ -47,7 +46,10 @@ class NetworkClientImpl(
 ) : NetworkClient() {
 
     private val refreshMutex = Mutex()
-    private val json = Json { ignoreUnknownKeys = true; isLenient = true }
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> coreRequest(
@@ -101,13 +103,13 @@ class NetworkClientImpl(
         val result = unauthorizedRequest<InternalTokenResponse> {
             method = HttpMethod.Post
             url(tokenRefreshPath)
-            contentType(ContentType.Application.Json)
+            header(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             setBody(InternalRefreshRequest(refreshToken))
         }
 
         when (result) {
             is AppResult.Success -> {
-                tokenProvider.saveTokens(result.data.accessToken, result.data.refreshToken)
+                tokenProvider.saveTokens(result.data.accessToken, result.data.refreshToken, Long.MAX_VALUE)
                 true
             }
             is AppResult.Failure -> false

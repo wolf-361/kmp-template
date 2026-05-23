@@ -6,7 +6,7 @@ struct iOSApp: App {
     private let effectsHandler: GlobalUiEffectsHandler
 
     init() {
-        KoinHelperKt.initKoin()
+        KoinHelperKt.doInitKoin()
         effectsHandler = KoinHelperKt.getGlobalUiEffectsHandler()
     }
 

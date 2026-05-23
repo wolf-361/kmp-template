@@ -12,17 +12,18 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun buildTestHttpClient(handler: MockRequestHandler): HttpClient =
-    HttpClient(MockEngine(handler)) {
-        install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true; isLenient = true })
-        }
+fun buildTestHttpClient(handler: MockRequestHandler): HttpClient = HttpClient(MockEngine(handler)) {
+    install(ContentNegotiation) {
+        json(
+            Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            },
+        )
     }
+}
 
-fun jsonResponse(
-    body: String,
-    status: HttpStatusCode = HttpStatusCode.OK,
-): MockRequestHandler = {
+fun jsonResponse(body: String, status: HttpStatusCode = HttpStatusCode.OK): MockRequestHandler = {
     respond(
         content = body,
         status = status,
@@ -30,8 +31,6 @@ fun jsonResponse(
     )
 }
 
-fun errorResponse(
-    status: HttpStatusCode = HttpStatusCode.InternalServerError,
-): MockRequestHandler = {
+fun errorResponse(status: HttpStatusCode = HttpStatusCode.InternalServerError): MockRequestHandler = {
     respond(content = "", status = status)
 }

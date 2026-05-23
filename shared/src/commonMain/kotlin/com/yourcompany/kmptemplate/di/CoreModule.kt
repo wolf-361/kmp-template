@@ -36,30 +36,35 @@ class CoreModule {
     fun provideGlobalUiEffectsHandler(): GlobalUiEffectsHandler = GlobalUiEffectsHandler()
 
     @Single
-    fun provideHttpClient(tokenProvider: TokenProvider): HttpClient =
-        HttpClient(createHttpEngine()) {
-            install(ContentNegotiation) {
-                json(Json { ignoreUnknownKeys = true; isLenient = true; explicitNulls = false })
-            }
-            install(BearerAuthPlugin) {
-                this.tokenProvider = tokenProvider
-            }
-            install(HttpTimeout) {
-                requestTimeoutMillis = NetworkConfig.REQUEST_TIMEOUT_MS
-                connectTimeoutMillis = NetworkConfig.CONNECT_TIMEOUT_MS
-            }
-            install(DefaultRequest) {
-                url(NetworkConfig.BASE_URL)
-            }
-            install(Logging) {
-                level = LogLevel.INFO
-                logger = object : KtorLogger {
-                    override fun log(message: String) {
-                        Logger.i("HttpClient") { message }
-                    }
+    fun provideHttpClient(tokenProvider: TokenProvider): HttpClient = HttpClient(createHttpEngine()) {
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    explicitNulls = false
+                },
+            )
+        }
+        install(BearerAuthPlugin) {
+            this.tokenProvider = tokenProvider
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = NetworkConfig.REQUEST_TIMEOUT_MS
+            connectTimeoutMillis = NetworkConfig.CONNECT_TIMEOUT_MS
+        }
+        install(DefaultRequest) {
+            url(NetworkConfig.BASE_URL)
+        }
+        install(Logging) {
+            level = LogLevel.INFO
+            logger = object : KtorLogger {
+                override fun log(message: String) {
+                    Logger.i("HttpClient") { message }
                 }
             }
         }
+    }
 
     @Single
     fun provideNetworkClient(

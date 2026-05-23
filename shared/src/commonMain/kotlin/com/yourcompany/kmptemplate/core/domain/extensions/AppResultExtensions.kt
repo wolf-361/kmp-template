@@ -2,11 +2,12 @@ package com.yourcompany.kmptemplate.core.domain.extensions
 
 import com.yourcompany.kmptemplate.core.domain.AppError
 import com.yourcompany.kmptemplate.core.domain.AppResult
-import kotlin.reflect.KClass
 
 class AppResultScope<T>(private val result: AppResult<T>) {
     private var successBlock: ((T) -> Unit)? = null
-    private val failureBlocks = mutableListOf<(AppError) -> Boolean>()
+
+    @PublishedApi
+    internal val failureBlocks = mutableListOf<(AppError) -> Boolean>()
     private var catchBlock: ((AppError) -> Unit)? = null
 
     fun success(block: (T) -> Unit) {
@@ -14,7 +15,14 @@ class AppResultScope<T>(private val result: AppResult<T>) {
     }
 
     inline fun <reified E : AppError> failure(noinline block: (E) -> Unit) {
-        failureBlocks += { error -> (error is E).also { if (it) block(error) } }
+        failureBlocks += { error ->
+            if (error is E) {
+                block(error)
+                true
+            } else {
+                false
+            }
+        }
     }
 
     fun catch(block: (AppError) -> Unit) {

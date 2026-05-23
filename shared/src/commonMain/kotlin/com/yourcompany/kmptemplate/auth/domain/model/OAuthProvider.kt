@@ -1,10 +1,7 @@
 package com.yourcompany.kmptemplate.auth.domain.model
 
 // TODO: clientId values come from BuildKonfig (per-platform, per-environment)
-enum class OAuthProvider(
-    val authorizationEndpoint: String,
-    val scopes: List<String>,
-) {
+enum class OAuthProvider(val authorizationEndpoint: String, val scopes: List<String>) {
     GOOGLE(
         authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth",
         scopes = listOf("openid", "email", "profile"),
