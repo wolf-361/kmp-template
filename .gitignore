@@ -18,8 +18,7 @@ local.properties
 *.jks
 
 # iOS
-*.xcuserdata/
-*.xcworkspace/xcuserdata/
+xcuserdata/
 DerivedData/
 *.ipa
 *.dSYM.zip
@@ -53,3 +52,7 @@ kotlin-js-store/
 .env
 *.env
 keystore.jks
+
+# Claude Code (local session / per-machine tool permissions)
+.claude/settings.local.json
+.claude-session
