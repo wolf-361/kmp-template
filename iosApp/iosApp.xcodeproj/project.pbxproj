@@ -14,7 +14,7 @@
 		D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D55FDAC040D6A1628572; };
 		0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82912B783A2C4006B5E751A3; };
 		EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2598D04A6C244116ACABB241; };
-		D1E2F3G4H5I6J7K8L9M0N1O2 /* ThemeMode+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430016EFC5E143ADB90DFC1E; };
+		D1E2F3A4B5C6A7E8F9A0B1C2 /* ThemeMode+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430016EFC5E143ADB90DFC1E; };
 		F1A2B3C4D5E6F7A8B9C0D1E2 /* AppHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E389E0446EC14A4D958964E4; };
 		F2A3B4C5D6E7F8A9B0C1D2E3 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3464763144CF193C20A13; };
 		F3A4B5C6D7E8F9A0B1C2D3E4 /* OrDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A4658CAB25474497C03CD3; };
@@ -228,7 +228,7 @@
 				D8771D57B9314F9688104AB5 /* ThemeMode+ColorScheme.swift in Sources */,
 				0362BF718A52482FAFF332D3 /* SettingsViewModelHolder.swift in Sources */,
 				EF0A6D3B06DA4018866E746C /* SettingsView.swift in Sources */,
-				D1E2F3G4H5I6J7K8L9M0N1O2 /* ThemeMode+UI.swift in Sources */,
+				D1E2F3A4B5C6A7E8F9A0B1C2 /* ThemeMode+UI.swift in Sources */,
 				F1A2B3C4D5E6F7A8B9C0D1E2 /* AppHeader.swift in Sources */,
 				F2A3B4C5D6E7F8A9B0C1D2E3 /* PrimaryButton.swift in Sources */,
 				F3A4B5C6D7E8F9A0B1C2D3E4 /* OrDivider.swift in Sources */,
