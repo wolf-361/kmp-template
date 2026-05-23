@@ -31,7 +31,7 @@
 		7D72D55FDAC040D6A1628572 /* ThemeMode+ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeMode+ColorScheme.swift"; sourceTree = "<group>"; };
 		82912B783A2C4006B5E751A3 /* SettingsViewModelHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelHolder.swift; sourceTree = "<group>"; };
 		2598D04A6C244116ACABB241 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		430016EFC5E143ADB90DFC1E /* ThemeMode+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeMode+UI.swift; sourceTree = "<group>"; };
+		430016EFC5E143ADB90DFC1E /* ThemeMode+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeMode+UI.swift"; sourceTree = "<group>"; };
 		E389E0446EC14A4D958964E4 /* AppHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHeader.swift; sourceTree = "<group>"; };
 		8CB3464763144CF193C20A13 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		62A4658CAB25474497C03CD3 /* OrDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrDivider.swift; sourceTree = "<group>"; };
